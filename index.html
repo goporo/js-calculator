@@ -17,35 +17,41 @@
             <div class="row">
                 <div class="col-9">
 
-                    <div class="row align-items-center my-2">
-                        <div class="col">
+                    <div class="row align-items-center my-3">
+                        <div class="col-4">
                             <label for="inputPassword6" class="col-form-label">Số thứ nhất</label>
                         </div>
-                        <div class="col">
-                            <input type="number" id="inputPassword6" class="form-control">
+                        <div class="col-8">
+                            <input type="text" id="num1" class="form-control">
                         </div>
                     </div>
-                    <div class="row align-items-center my-2">
-                        <div class="col">
+                    <div class="row align-items-center my-3">
+                        <div class="col-4">
                             <label for="inputPassword6" class="col-form-label">Số thứ hai</label>
                         </div>
-                        <div class="col">
-                            <input type="number" id="inputPassword6" class="form-control">
+                        <div class="col-8">
+                            <input type="text" id="num2" class="form-control">
                         </div>
                     </div>
-                    <div class="row align-items-center my-2">
-                        <div class="col">
+                    <hr>
+
+                    <div class="row align-items-center my-3">
+                        <div class="col-4">
                             <label for="inputPassword6" class="col-form-label">Kết quả</label>
                         </div>
-                        <div class="col">
-                            <input type="number" id="inputPassword6" class="form-control">
+                        <div class="col-8">
+                            <div id="result" class="col form-control" style="pointer-events:none">0</div>
                         </div>
+                    </div>
+                    <div class="row align-items-center my-3">
+                        <label class="col-4" for="inputPassword6" class="col-form-label">Thông báo</label>
+                        <span id="notification" class="col-8" style="color:red">Số thứ nhất không phải là số</span>
                     </div>
 
 
                 </div>
 
-                <div class="col-3 align-items-center">
+                <div class="col-3 align-items-center py-2">
                     <div class="m-2 form-check">
                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                         <label class="form-check-label" for="flexRadioDefault1">
@@ -73,6 +79,9 @@
                             Chia
                         </label>
                     </div>
+                    <button id="calcButton" class="btn btn-primary"
+                        style="justify-self:center; width: 100%;">Tính</button>
+
                 </div>
             </div>
 
@@ -86,6 +95,53 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/02611bfd0e.js" crossorigin="anonymous"></script>
+
+    <script>
+        const mymap = new Map();
+        mymap.set(0, '+')
+        mymap.set(1, '-')
+        mymap.set(2, '*')
+        mymap.set(3, '/')
+
+        const calcButton = document.getElementById("calcButton");
+        const result = document.getElementById("result");
+        const notification = document.getElementById("notification");
+
+        function getRadioCheckedValue(radio_name) {
+            var radios = document.getElementsByName(radio_name)
+
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return i;
+                }
+            }
+
+            return '';
+        }
+
+        calcButton.addEventListener("click", () => calc());
+        const calc = () => {
+            const num1 = document.getElementById("num1").value;
+            const num2 = document.getElementById("num2").value;
+            const operation = mymap.get(getRadioCheckedValue("flexRadioDefault"))
+            if (operation !== null) {
+                if (isNaN(num1)) {
+                    notification.innerHTML = "Số thứ nhất không phải là số";
+                    return;
+                }
+                if (isNaN(num2)) {
+                    notification.innerHTML = "Số thứ hai không phải là số";
+                    return;
+                }
+                let res = num1 + operation + num2;
+                result.innerHTML = eval(res);
+                notification.innerHTML = "";
+            }
+            else {
+                notification.innerHTML = "Chưa nhập phép tính"
+            }
+        }
+    </script>
 </body>
 
 </html>
